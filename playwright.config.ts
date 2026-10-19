@@ -12,20 +12,8 @@ export default defineConfig({
   use: {
     baseURL: process.env.BASE_URL || 'https://practicesoftwaretesting.com',
     testIdAttribute: 'data-test',
-    browserName: 'chromium',
+    channel: process.env.CI ? 'chrome' : undefined,
     headless: true,
-    viewport: { width: 1280, height: 720 },
-    locale: 'en-US',
-    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
-    actionTimeout: 10000,
-    navigationTimeout: 15000,
-    launchOptions: {
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-blink-features=AutomationControlled'
-      ]
-    },
     screenshot: 'only-on-failure',
     trace: 'on-first-retry'
   }

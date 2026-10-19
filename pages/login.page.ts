@@ -29,7 +29,8 @@ export class LoginPage {
   }
 
   async goto() {
-    await this.page.goto('/auth/login', { waitUntil: 'domcontentloaded' });
+    await this.page.goto('/auth/login');
+    await this.emailInput.waitFor({ state: 'visible' });
   }
 
   async login(email: string, password: string) {
