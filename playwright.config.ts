@@ -12,8 +12,8 @@ export default defineConfig({
   use: {
     baseURL: process.env.BASE_URL || 'https://practicesoftwaretesting.com',
     testIdAttribute: 'data-test',
-    browserName: 'chromium',
-    headless: true,
+    channel: process.env.BROWSER_CHANNEL || (process.env.CI ? 'chrome' : undefined),
+    headless: process.env.CI ? false : true,
     launchOptions: {
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     },
