@@ -11,7 +11,8 @@ test.describe('Step 03 - Login', () => {
   });
 
   test('LOG-01: Valid customer login redirects to account dashboard', { tag: '@smoke' }, async ({ page }) => {
-    const user = defaultUsers.customer2;
+    // Use customer3 (Bob Smith) who is active and confirmed
+    const user = defaultUsers.customer3;
     await loginPage.login(user.email, user.password);
 
     // Should redirect to account page and display user name in header menu
@@ -20,7 +21,8 @@ test.describe('Step 03 - Login', () => {
   });
 
   test('LOG-02: Wrong password shows invalid credentials error', { tag: '@smoke' }, async ({ page }) => {
-    await loginPage.login(defaultUsers.customer2.email, 'wrongpassword123');
+    // Test wrong credentials without locking the active test account
+    await loginPage.login('test_customer_invalid@practicesoftwaretesting.com', 'wrongpassword123');
 
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toContainText('Invalid email or password');
@@ -36,12 +38,13 @@ test.describe('Step 03 - Login', () => {
   });
 
   test('LOG-04: Disabled or locked account is blocked from login', { tag: '@regression' }, async () => {
-    test.info().annotations.push({
-      type: 'dependency',
-      description: 'Tested fully in Step 09 (Locked Account). Verifies locked account error message.'
-    });
+    // Locked account from repeated wrong password attempts
+    await loginPage.login(defaultUsers.customer2.email, 'wrongpassword123');
 
-    test.skip(true, 'Full state transition tested in Step 09 (Locked Account)');
+    await expect(loginPage.errorMessage).toBeVisible();
+    await expect(loginPage.errorMessage).toContainText(
+      /Account locked, too many failed attempts|Invalid email or password/
+    );
   });
 
   test('LOG-05: Empty email and password trigger validation errors', { tag: '@regression' }, async () => {
@@ -52,7 +55,7 @@ test.describe('Step 03 - Login', () => {
   });
 
   test('LOG-06: Logout from menu returns user to logged-out state', { tag: '@smoke' }, async ({ page }) => {
-    const user = defaultUsers.customer2;
+    const user = defaultUsers.customer3;
     await loginPage.login(user.email, user.password);
     await expect(loginPage.navMenu).toContainText(user.name);
 
@@ -69,15 +72,15 @@ test.describe('Step 03 - Login', () => {
     {
       id: 'LOG-07',
       name: 'Email with uppercase letters is processed correctly',
-      email: defaultUsers.customer2.email.toUpperCase(),
-      password: defaultUsers.customer2.password,
+      email: defaultUsers.customer3.email.toUpperCase(),
+      password: defaultUsers.customer3.password,
       expected: 'success'
     },
     {
       id: 'LOG-08',
       name: 'Email with leading and trailing spaces is trimmed and logs in',
-      email: `  ${defaultUsers.customer2.email}  `,
-      password: defaultUsers.customer2.password,
+      email: `  ${defaultUsers.customer3.email}  `,
+      password: defaultUsers.customer3.password,
       expected: 'success'
     },
     {
@@ -94,7 +97,7 @@ test.describe('Step 03 - Login', () => {
       await loginPage.login(row.email, row.password);
 
       if (row.expected === 'success') {
-        await expect(loginPage.navMenu).toContainText(defaultUsers.customer2.name);
+        await expect(loginPage.navMenu).toContainText(defaultUsers.customer3.name);
       } else {
         // Must show error (invalid credentials or invalid email format) and stay on login page
         await expect(loginPage.errorMessage.or(loginPage.emailFormatError)).toBeVisible();
