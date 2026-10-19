@@ -63,6 +63,9 @@ View the HTML test report:
 npm run report
 ```
 
+## Continuous Integration
+Tests run automatically on push/PR via GitHub Actions on `ubuntu-latest`. The workflow runs Google Chrome inside a virtual display (`xvfb`) for complete browser parity and Cloudflare compatibility.
+
 ## Current Implementation Status
 - [x] **Step 3: Login** (`tests/03-login.spec.ts`) - Valid logins, invalid credentials, required field validations, logout session handling, uppercase email, trimmed whitespace, SQL injection resilience, and protected route redirect.
 - [ ] **Step 2: Register** (Next)
