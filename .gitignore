@@ -1,4 +1,3 @@
-
 # Playwright
 node_modules/
 test-results/
@@ -6,5 +5,12 @@ playwright-report/
 blob-report/
 .playwright-cache/
 .playwright-auth/
-.DS_Store
+.env
+
+# Temporary files and docs
 temp/
+
+# macOS
+.DS_Store
+**/.DS_Store
+._*
