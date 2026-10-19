@@ -1,12 +1,24 @@
 {
-  "name": "polaris",
+  "name": "practicesoftwaretesting",
   "version": "1.0.0",
+  "description": "Playwright test automation and bug hunting for Practice Software Testing (Toolshop)",
   "main": "index.js",
-  "scripts": {},
-  "keywords": [],
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "report": "playwright show-report"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "qa",
+    "practicesoftwaretesting"
+  ],
   "author": "Syed Haider",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@playwright/test": "^1.58.0",
     "@types/node": "^25.0.10"
