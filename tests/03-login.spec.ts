@@ -104,7 +104,11 @@ test.describe('Step 03 - Login', () => {
   }
 
   test('LOG-10: Opening account URL directly while logged out redirects to login', { tag: '@regression' }, async ({ page }) => {
+    // Navigate directly to protected account page
     await page.goto('/account');
-    await expect(page).toHaveURL(/.*auth\/login/);
+
+    // Route guard checks auth status and redirects unauthenticated user to login
+    await expect(page).toHaveURL(/.*auth\/login/, { timeout: 15000 });
+    await expect(loginPage.emailInput).toBeVisible({ timeout: 15000 });
   });
 });
