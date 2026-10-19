@@ -63,7 +63,7 @@ test.describe('Step 03 - Login', () => {
 
     // After logout, user menu is replaced with Sign In link
     await expect(loginPage.navSignIn).toBeVisible();
-    await page.goto('/account');
+    await page.goto('/account', { waitUntil: 'domcontentloaded' });
     await expect(page).toHaveURL(/.*auth\/login/);
   });
 
@@ -108,7 +108,7 @@ test.describe('Step 03 - Login', () => {
 
   test('LOG-10: Opening account URL directly while logged out redirects to login', { tag: '@regression' }, async ({ page }) => {
     // Navigate directly to protected account page
-    await page.goto('/account');
+    await page.goto('/account', { waitUntil: 'domcontentloaded' });
 
     // Route guard checks auth status and redirects unauthenticated user to login
     await expect(page).toHaveURL(/.*auth\/login/, { timeout: 15000 });
