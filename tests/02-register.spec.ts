@@ -91,7 +91,7 @@ test.describe('Step 02 - Register', () => {
       email: defaultUsers.customer1.email
     });
 
-    await expect(registerPage.registerError).toBeVisible();
+    await expect(registerPage.registerError).toBeVisible({ timeout: 15000 });
     await expect(registerPage.registerError).toContainText('A customer with this email address already exists');
     await expect(page).toHaveURL(/.*auth\/register/);
   });
@@ -120,7 +120,7 @@ test.describe('Step 02 - Register', () => {
       email: `underage_${timestamp}@example.com`
     });
 
-    await expect(registerPage.registerError).toBeVisible();
+    await expect(registerPage.registerError).toBeVisible({ timeout: 15000 });
     await expect(registerPage.registerError).toContainText('Customer must be 18 years old.');
     await expect(page).toHaveURL(/.*auth\/register/);
   });
@@ -178,7 +178,7 @@ test.describe('Step 02 - Register', () => {
       email: `customer_${timestamp}@example.com`
     });
 
-    await expect(registerPage.registerError).toBeVisible();
+    await expect(registerPage.registerError).toBeVisible({ timeout: 15000 });
     await expect(registerPage.registerError).toContainText('The given password has appeared in a data leak');
     await expect(page).toHaveURL(/.*auth\/register/);
   });

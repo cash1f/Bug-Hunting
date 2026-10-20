@@ -108,11 +108,39 @@ export class RegisterPage {
     if (data.postalCode) await this.postalCodeInput.fill(data.postalCode);
     if (data.houseNumber) await this.houseNumberInput.fill(data.houseNumber);
 
-    // Wait for potential autofill to settle, then fill manual address fields if provided
-    await this.page.waitForTimeout(300);
-    if (data.street) await this.streetInput.fill(data.street);
-    if (data.city) await this.cityInput.fill(data.city);
-    if (data.state) await this.stateInput.fill(data.state);
+    // Playwright best practice: Event-Driven Synchronization over Hard Sleeps.
+    // Entering postcode and house number triggers an asynchronous background API call
+    // (/postcode-lookup) in Angular. Playwright's built-in actionability checks only verify
+    // that the Register button is clickable in the DOM—they cannot detect in-flight HTTP requests.
+    // If the button is clicked while the API response arrives, Angular re-renders the address
+    // fields and swallows the form submission. Rather than using an anti-pattern like a hard
+    // sleep (waitForTimeout), we synchronize deterministically with the network promise.
+    if (data.postalCode && data.houseNumber) {
+      await this.page.waitForResponse(
+        res => res.url().includes('postcode-lookup'),
+        { timeout: 3000 }
+      ).catch(() => {});
+    }
+
+    // Fill address fields only if not already populated by autofill
+    if (data.street) {
+      const currentStreet = await this.streetInput.inputValue();
+      if (!currentStreet) {
+        await this.streetInput.fill(data.street);
+      }
+    }
+    if (data.city) {
+      const currentCity = await this.cityInput.inputValue();
+      if (!currentCity) {
+        await this.cityInput.fill(data.city);
+      }
+    }
+    if (data.state) {
+      const currentState = await this.stateInput.inputValue();
+      if (!currentState) {
+        await this.stateInput.fill(data.state);
+      }
+    }
 
     if (data.phone) await this.phoneInput.fill(data.phone);
     if (data.email) await this.emailInput.fill(data.email);
