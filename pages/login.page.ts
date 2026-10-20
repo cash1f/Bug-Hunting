@@ -12,6 +12,7 @@ export class LoginPage {
   readonly navMenu: Locator;
   readonly navSignOut: Locator;
   readonly navSignIn: Locator;
+  readonly registerLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -26,6 +27,7 @@ export class LoginPage {
     this.navMenu = page.getByTestId('nav-menu');
     this.navSignOut = page.getByTestId('nav-sign-out');
     this.navSignIn = page.getByTestId('nav-sign-in');
+    this.registerLink = page.getByRole('link', { name: 'Register your account' });
   }
 
   async goto() {

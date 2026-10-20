@@ -5,7 +5,7 @@ export const testAddresses = {
     address: 'Gerritsenstraat 42',
     city: 'Oosthuizen',
     state: 'Groningen',
-    country: 'The Netherlands',
+    country: 'Netherlands (the)',
     countryCode: 'NL',
     postcode: '1474 HC'
   },

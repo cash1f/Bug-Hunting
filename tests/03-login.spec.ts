@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/login.page';
-import { defaultUsers } from '../test-data/users';
+import { defaultUsers, invalidCredentials } from '../test-data/users';
 
 test.describe('Step 03 - Login', () => {
   let loginPage: LoginPage;
@@ -22,7 +22,7 @@ test.describe('Step 03 - Login', () => {
 
   test('LOG-02: Wrong password shows invalid credentials error', { tag: '@smoke' }, async ({ page }) => {
     // Test wrong credentials without locking the active test account
-    await loginPage.login('test_customer_invalid@practicesoftwaretesting.com', 'wrongpassword123');
+    await loginPage.login(invalidCredentials.invalidEmail, invalidCredentials.wrongPassword);
 
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toContainText('Invalid email or password');
@@ -30,7 +30,7 @@ test.describe('Step 03 - Login', () => {
   });
 
   test('LOG-03: Unknown email shows invalid credentials error', { tag: '@regression' }, async ({ page }) => {
-    await loginPage.login('unknown_user_9999@example.com', 'welcome01');
+    await loginPage.login(invalidCredentials.unknownEmail, defaultUsers.customer1.password);
 
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toContainText('Invalid email or password');
@@ -39,7 +39,7 @@ test.describe('Step 03 - Login', () => {
 
   test('LOG-04: Disabled or locked account is blocked from login', { tag: '@regression' }, async () => {
     // Locked account from repeated wrong password attempts
-    await loginPage.login(defaultUsers.customer2.email, 'wrongpassword123');
+    await loginPage.login(defaultUsers.customer2.email, invalidCredentials.wrongPassword);
 
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toContainText(
@@ -86,8 +86,8 @@ test.describe('Step 03 - Login', () => {
     {
       id: 'LOG-09',
       name: 'SQL injection attempt in email fails safely without 500 error',
-      email: "' OR '1'='1",
-      password: 'password',
+      email: invalidCredentials.sqlInjection.email,
+      password: invalidCredentials.sqlInjection.password,
       expected: 'error'
     }
   ];
