@@ -13,6 +13,7 @@ export class LoginPage {
   readonly navSignOut: Locator;
   readonly navSignIn: Locator;
   readonly registerLink: Locator;
+  readonly forgotPasswordLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -28,6 +29,7 @@ export class LoginPage {
     this.navSignOut = page.getByTestId('nav-sign-out');
     this.navSignIn = page.getByTestId('nav-sign-in');
     this.registerLink = page.getByRole('link', { name: 'Register your account' });
+    this.forgotPasswordLink = page.getByRole('link', { name: 'Forgot your password?' });
   }
 
   async goto() {

@@ -14,6 +14,7 @@ test.describe('Step 02 - Register', () => {
 
   test('REG-01: Valid customer registration redirects to login page and allows login', { tag: '@smoke' }, async ({ page }) => {
     const timestamp = Date.now();
+    const randomSuffix = Math.floor(Math.random() * 100000);
     const newUser = {
       firstName: registrationData.validUser.firstName,
       lastName: registrationData.validUser.lastName,
@@ -24,7 +25,7 @@ test.describe('Step 02 - Register', () => {
       postalCode: testAddresses.netherlands.postcode,
       houseNumber: testAddresses.netherlands.houseNumber,
       state: testAddresses.netherlands.state,
-      email: `customer_${timestamp}@practicesoftwaretesting.com`
+      email: `customer_${timestamp}_${randomSuffix}@practicesoftwaretesting.com`
     };
 
     await registerPage.register(newUser);

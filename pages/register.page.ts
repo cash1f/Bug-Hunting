@@ -108,13 +108,8 @@ export class RegisterPage {
     if (data.postalCode) await this.postalCodeInput.fill(data.postalCode);
     if (data.houseNumber) await this.houseNumberInput.fill(data.houseNumber);
 
-    // Playwright best practice: Event-Driven Synchronization over Hard Sleeps.
-    // Entering postcode and house number triggers an asynchronous background API call
-    // (/postcode-lookup) in Angular. Playwright's built-in actionability checks only verify
-    // that the Register button is clickable in the DOM—they cannot detect in-flight HTTP requests.
-    // If the button is clicked while the API response arrives, Angular re-renders the address
-    // fields and swallows the form submission. Rather than using an anti-pattern like a hard
-    // sleep (waitForTimeout), we synchronize deterministically with the network promise.
+    // Event-driven synchronization: Wait for the app's background postcode-lookup API to complete.
+    // This avoids arbitrary sleeps while ensuring address autofill settles before clicking Register.
     if (data.postalCode && data.houseNumber) {
       await this.page.waitForResponse(
         res => res.url().includes('postcode-lookup'),

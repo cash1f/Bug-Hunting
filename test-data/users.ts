@@ -68,3 +68,30 @@ export const registrationData = {
   shortPassword: 'Ab1!',
   invalidDateFormat: '01/01/2000'
 };
+
+export const forgotPasswordData = {
+  resetPasswordValue: 'welcome02',
+  unknownEmail: 'nobody@example.com',
+  invalidEmailFormat: 'abc'
+};
+
+export const profileData = {
+  updatedNames: {
+    firstName: 'Morgan',
+    lastName: 'Freeman'
+  },
+  updatedAddress: {
+    phone: '0687654321',
+    street: 'Updated High Street 42',
+    postalCode: '1012 AB',
+    city: 'Amsterdam',
+    state: 'Noord-Holland',
+    country: 'Netherlands'
+  },
+  invalidPhone: 'invalid-phone-abc',
+  cityMax40: 'A'.repeat(40),
+  cityExceedsMax41: 'A'.repeat(41),
+  newValidPassword: 'NewSecurePassword2026!#'
+};
+
+
