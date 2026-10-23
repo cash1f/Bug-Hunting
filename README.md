@@ -11,10 +11,12 @@ The test scenarios are based on the 18-step Testing Guide found directly on the 
 
 ## Project Structure
 ```text
-├── helpers/             # Shared test helpers (e.g., auth login/logout)
+├── helpers/             # Shared test helpers (e.g., auth login/logout, customer creation)
 ├── pages/               # Page Object Model classes
+│   ├── favorites.page.ts # Customer favorites page elements and actions
 │   ├── forgot-password.page.ts # Forgot password page elements and actions
 │   ├── login.page.ts    # Login page elements and actions
+│   ├── product-detail.page.ts # Product detail page elements and actions
 │   ├── profile.page.ts  # Customer profile and password management elements and actions
 │   └── register.page.ts # Register page elements and actions
 ├── test-data/           # Static test data and boundary values
@@ -24,7 +26,8 @@ The test scenarios are based on the 18-step Testing Guide found directly on the 
 │   ├── 02-register.spec.ts # Step 2: Register test scenarios
 │   ├── 03-login.spec.ts # Step 3: Login test scenarios
 │   ├── 04-forgot-password.spec.ts # Step 4: Forgot Password test scenarios
-│   └── 05-profile.spec.ts # Step 5: Customer Profile test scenarios
+│   ├── 05-profile.spec.ts # Step 5: Customer Profile test scenarios
+│   └── 06-favorites.spec.ts # Step 6: Customer Favorites test scenarios
 ├── playwright.config.ts # Playwright configuration (baseURL, testId, reporter)
 ├── package.json         # Scripts and dependencies
 └── README.md
@@ -77,4 +80,5 @@ Tests run automatically on push/PR via GitHub Actions on `ubuntu-latest`. The wo
 - [x] **Step 3: Login** (`tests/03-login.spec.ts`) - Valid logins, invalid credentials, required field validations, logout session handling, uppercase email, trimmed whitespace, SQL injection resilience, and protected route redirect.
 - [x] **Step 4: Forgot Password** (`tests/04-forgot-password.spec.ts`) - Password reset with registered email, immediate authentication with reset password (`welcome02`), invalidation of previous password, unknown email error handling, required field validation on empty email, invalid email format validation, and navigation from login page.
 - [x] **Step 5: Customer Profile** (`tests/05-profile.spec.ts`) - Profile information updates (first/last name, phone, address fields), reload persistence, phone format validation error handling, city length boundary validation (40 character acceptance vs 41 character rejection), same-password rejection, automatic session logout on password change, and immediate authentication with new password.
-- [ ] **Step 6: Customer Favorites** (Next)
+- [x] **Step 6: Customer Favorites** (`tests/06-favorites.spec.ts`) - Adding favorites from product detail page, listing card favorite capability check, adding multiple favorites and deleting a specific item with list verification, duplicate favorite prevention error toast, favorite persistence across logout and re-login, logged-out favorite rejection with unauthorized toast, and unavailable product URL handling.
+- [ ] **Step 7: Customer Invoices** (Next)

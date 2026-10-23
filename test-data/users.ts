@@ -94,4 +94,14 @@ export const profileData = {
   newValidPassword: 'NewSecurePassword2026!#'
 };
 
+export const favoritesData = {
+  messages: {
+    added: 'Product added to your favorites list.',
+    alreadyAdded: 'Product already in your favorites list.',
+    unauthorized: 'Unauthorized, can not add product to your favorite list.'
+  },
+  invalidProductId: 'invalid-product-id-99999'
+};
+
+
 
