@@ -8,12 +8,14 @@ export async function loginAsCustomer(page: Page, user = defaultUsers.customer2)
   const loginPage = new LoginPage(page);
   await loginPage.goto();
   await loginPage.login(user.email, user.password);
+  await expect(page).toHaveURL(/.*account/);
 }
 
 export async function loginAsAdmin(page: Page) {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
   await loginPage.login(defaultUsers.admin.email, defaultUsers.admin.password);
+  await expect(page).toHaveURL(/.*account/);
 }
 
 export async function ensureLoggedOut(page: Page) {

@@ -103,5 +103,9 @@ export const favoritesData = {
   invalidProductId: 'invalid-product-id-99999'
 };
 
-
-
+export const invoicesData = {
+  messages: {
+    notFound: "This invoice doesn't exist."
+  },
+  pdfHeader: '%PDF-'
+};

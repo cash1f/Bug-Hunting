@@ -15,6 +15,8 @@ The test scenarios are based on the 18-step Testing Guide found directly on the 
 ├── pages/               # Page Object Model classes
 │   ├── favorites.page.ts # Customer favorites page elements and actions
 │   ├── forgot-password.page.ts # Forgot password page elements and actions
+│   ├── invoice-detail.page.ts # Invoice detail and PDF download elements and actions
+│   ├── invoices.page.ts # Customer invoices list elements and actions
 │   ├── login.page.ts    # Login page elements and actions
 │   ├── product-detail.page.ts # Product detail page elements and actions
 │   ├── profile.page.ts  # Customer profile and password management elements and actions
@@ -27,7 +29,8 @@ The test scenarios are based on the 18-step Testing Guide found directly on the 
 │   ├── 03-login.spec.ts # Step 3: Login test scenarios
 │   ├── 04-forgot-password.spec.ts # Step 4: Forgot Password test scenarios
 │   ├── 05-profile.spec.ts # Step 5: Customer Profile test scenarios
-│   └── 06-favorites.spec.ts # Step 6: Customer Favorites test scenarios
+│   ├── 06-favorites.spec.ts # Step 6: Customer Favorites test scenarios
+│   └── 07-invoices.spec.ts # Step 7: Customer Invoices test scenarios
 ├── playwright.config.ts # Playwright configuration (baseURL, testId, reporter)
 ├── package.json         # Scripts and dependencies
 └── README.md
@@ -81,4 +84,5 @@ Tests run automatically on push/PR via GitHub Actions on `ubuntu-latest`. The wo
 - [x] **Step 4: Forgot Password** (`tests/04-forgot-password.spec.ts`) - Password reset with registered email, immediate authentication with reset password (`welcome02`), invalidation of previous password, unknown email error handling, required field validation on empty email, invalid email format validation, and navigation from login page.
 - [x] **Step 5: Customer Profile** (`tests/05-profile.spec.ts`) - Profile information updates (first/last name, phone, address fields), reload persistence, phone format validation error handling, city length boundary validation (40 character acceptance vs 41 character rejection), same-password rejection, automatic session logout on password change, and immediate authentication with new password.
 - [x] **Step 6: Customer Favorites** (`tests/06-favorites.spec.ts`) - Adding favorites from product detail page, listing card favorite capability check, adding multiple favorites and deleting a specific item with list verification, duplicate favorite prevention error toast, favorite persistence across logout and re-login, logged-out favorite rejection with unauthorized toast, and unavailable product URL handling.
-- [ ] **Step 7: Customer Invoices** (Next)
+- [x] **Step 7: Customer Invoices** (`tests/07-invoices.spec.ts`) - Customer invoices list viewing, opening invoice details, detail values matching list values (invoice number, date, total), PDF download with file name, size, and `%PDF-` header validation, logged-out access redirect to login, and unauthorized cross-customer invoice access prevention (404 / no data shown).
+- [ ] **Step 8: Product Catalog & Search** (Next)
