@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export interface RegisterFormData {
   firstName: string;
@@ -108,34 +108,15 @@ export class RegisterPage {
     if (data.postalCode) await this.postalCodeInput.fill(data.postalCode);
     if (data.houseNumber) await this.houseNumberInput.fill(data.houseNumber);
 
-    // Event-driven synchronization: Wait for the app's background postcode-lookup API to complete.
-    // This avoids arbitrary sleeps while ensuring address autofill settles before clicking Register.
-    if (data.postalCode && data.houseNumber) {
-      await this.page.waitForResponse(
-        res => res.url().includes('postcode-lookup'),
-        { timeout: 3000 }
-      ).catch(() => {});
+    // If street/city/state were provided, fill them; otherwise wait for application autofill
+    if (data.street) {
+      await this.streetInput.fill(data.street);
+    } else if (data.postalCode && data.houseNumber) {
+      await expect(this.streetInput).not.toHaveValue('', { timeout: 5000 }).catch(() => {});
     }
 
-    // Fill address fields only if not already populated by autofill
-    if (data.street) {
-      const currentStreet = await this.streetInput.inputValue();
-      if (!currentStreet) {
-        await this.streetInput.fill(data.street);
-      }
-    }
-    if (data.city) {
-      const currentCity = await this.cityInput.inputValue();
-      if (!currentCity) {
-        await this.cityInput.fill(data.city);
-      }
-    }
-    if (data.state) {
-      const currentState = await this.stateInput.inputValue();
-      if (!currentState) {
-        await this.stateInput.fill(data.state);
-      }
-    }
+    if (data.city) await this.cityInput.fill(data.city);
+    if (data.state) await this.stateInput.fill(data.state);
 
     if (data.phone) await this.phoneInput.fill(data.phone);
     if (data.email) await this.emailInput.fill(data.email);

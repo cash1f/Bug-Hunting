@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export interface ProfileAddressUpdate {
   phone?: string;
@@ -61,13 +61,8 @@ export class ProfilePage {
   }
 
   async goto() {
-    await this.page.goto('/account/profile', { waitUntil: 'domcontentloaded' });
-    await this.firstNameInput.waitFor({ state: 'visible' });
-    // Wait until Angular finishes populating the user's profile details into the input
-    await this.page.waitForFunction(() => {
-      const input = document.querySelector('[data-test="first-name"]') as HTMLInputElement;
-      return input !== null && input.value.trim().length > 0;
-    }, { timeout: 10000 });
+    await this.page.goto('/account/profile');
+    await expect(this.firstNameInput).not.toHaveValue('', { timeout: 10000 });
   }
 
   async updateName(firstName: string, lastName: string) {
@@ -89,16 +84,8 @@ export class ProfilePage {
 
   async changePassword(currentPassword: string, newPassword: string, confirmPassword: string) {
     await this.currentPasswordInput.fill(currentPassword);
-
-    // Keystroke typing and blur to trigger Angular custom password control validation
-    await this.newPasswordInput.focus();
-    await this.newPasswordInput.pressSequentially(newPassword, { delay: 10 });
-    await this.newPasswordInput.blur();
-
-    await this.newPasswordConfirmInput.focus();
-    await this.newPasswordConfirmInput.pressSequentially(confirmPassword, { delay: 10 });
-    await this.newPasswordConfirmInput.blur();
-
+    await this.newPasswordInput.fill(newPassword);
+    await this.newPasswordConfirmInput.fill(confirmPassword);
     await this.changePasswordButton.click();
   }
 }

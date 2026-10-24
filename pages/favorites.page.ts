@@ -16,12 +16,7 @@ export class FavoritesPage {
   }
 
   async goto() {
-    await this.page.goto('/account/favorites', { waitUntil: 'domcontentloaded' });
-    // Wait for the backend favorites response to ensure list is populated
-    await this.page.waitForResponse(
-      res => res.url().includes('/favorites') && res.status() === 200,
-      { timeout: 7000 }
-    ).catch(() => {});
+    await this.page.goto('/account/favorites');
   }
 
   async getFavoriteTitles(): Promise<string[]> {
@@ -39,15 +34,7 @@ export class FavoritesPage {
 
   async removeFavoriteByName(name: string) {
     const card = this.favoriteCards.filter({ hasText: name });
-    const deleteButton = card.getByTestId('delete');
-
-    const deletePromise = this.page.waitForResponse(
-      res => res.request().method() === 'DELETE' && res.url().includes('/favorites/'),
-      { timeout: 7000 }
-    ).catch(() => null);
-
-    await deleteButton.click();
-    await deletePromise;
+    await card.getByTestId('delete').click();
     await expect(card).toHaveCount(0);
   }
 }

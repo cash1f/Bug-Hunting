@@ -108,34 +108,27 @@ test.describe('Step 05 - Customer Profile', () => {
     const customer = await createAndLoginCustomer(page);
     await profilePage.goto();
 
-    const responsePromise = page.waitForResponse(
-      res => res.url().includes('/change-password') && res.status() === 200
-    );
     await profilePage.changePassword(
       customer.password,
       profileData.newValidPassword,
       profileData.newValidPassword
     );
-    await responsePromise;
 
-    // After password change, user's session token is cleared and user is logged out
-    const token = await page.evaluate(() => localStorage.getItem('auth_token'));
-    expect(token).toBeNull();
+    // Verify password update message and user is logged out (Sign in button visible)
+    await expect(profilePage.successAlert).toBeVisible();
+    await expect(page.getByTestId('nav-sign-in')).toBeVisible();
   });
 
   test('PRF-08: Customer can log in with new password while old password fails', { tag: '@regression' }, async ({ page }) => {
     const customer = await createAndLoginCustomer(page);
     await profilePage.goto();
 
-    const responsePromise = page.waitForResponse(
-      res => res.url().includes('/change-password') && res.status() === 200
-    );
     await profilePage.changePassword(
       customer.password,
       profileData.newValidPassword,
       profileData.newValidPassword
     );
-    await responsePromise;
+    await expect(profilePage.successAlert).toBeVisible();
 
     // Navigate to login page
     const loginPage = new LoginPage(page);

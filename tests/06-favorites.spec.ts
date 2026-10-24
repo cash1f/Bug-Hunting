@@ -18,30 +18,27 @@ test.describe('Step 06 - Customer Favorites', () => {
     await createAndLoginCustomer(page);
 
     await page.goto('/');
-    await page.waitForResponse(res => res.url().includes('/products'));
-    await page.locator('.card').first().click();
+    await page.locator('a.card').first().click();
     await page.waitForURL(/.*product\/.*/);
 
     const productName = (await productDetailPage.productName.textContent())?.trim() || '';
     await productDetailPage.addToFavorites();
 
     // Verify success toast appears
-    await expect(productDetailPage.toastMessage.filter({ hasText: favoritesData.messages.added })).toBeVisible();
+    await expect(page.getByText(favoritesData.messages.added)).toBeVisible();
 
     // Verify product is listed on Favorites page
     await favoritesPage.goto();
-    const favoriteTitles = await favoritesPage.getFavoriteTitles();
-    expect(favoriteTitles).toContain(productName);
+    await expect(page.getByRole('heading', { name: productName, exact: true })).toBeVisible();
   });
 
   test('FAV-02: Add a favorite from the listing', { tag: '@regression' }, async ({ page }) => {
     await createAndLoginCustomer(page);
 
     await page.goto('/');
-    await page.waitForResponse(res => res.url().includes('/products'));
 
     // Catalog card does not have a direct favorite button
-    const firstCard = page.locator('.card').first();
+    const firstCard = page.locator('a.card').first();
     await expect(firstCard.getByTestId('add-to-favorites')).toHaveCount(0);
 
     // Clicking card opens detail page where favorite action is available
@@ -56,21 +53,19 @@ test.describe('Step 06 - Customer Favorites', () => {
     const addedTitles: string[] = [];
     for (let i = 0; i < 3; i++) {
       await page.goto('/');
-      await page.waitForResponse(res => res.url().includes('/products'));
-      await page.locator('.card').nth(i).click();
+      await page.locator('a.card').nth(i).click();
       await page.waitForURL(/.*product\/.*/);
 
       const title = (await productDetailPage.productName.textContent())?.trim() || '';
       addedTitles.push(title);
 
       await productDetailPage.addToFavorites();
-      await expect(productDetailPage.toastMessage.filter({ hasText: favoritesData.messages.added })).toBeVisible();
+      await expect(page.getByText(favoritesData.messages.added)).toBeVisible();
     }
 
     await favoritesPage.goto();
-    let currentTitles = await favoritesPage.getFavoriteTitles();
     for (const title of addedTitles) {
-      expect(currentTitles).toContain(title);
+      await expect(page.getByRole('heading', { name: title, exact: true })).toBeVisible();
     }
 
     // Remove the first product from favorites
@@ -78,48 +73,43 @@ test.describe('Step 06 - Customer Favorites', () => {
     await favoritesPage.removeFavoriteByName(titleToRemove);
 
     // Verify only the removed one is gone
-    currentTitles = await favoritesPage.getFavoriteTitles();
-    expect(currentTitles).not.toContain(titleToRemove);
-    expect(currentTitles).toContain(addedTitles[1]);
-    expect(currentTitles).toContain(addedTitles[2]);
+    await expect(page.getByRole('heading', { name: titleToRemove, exact: true })).not.toBeVisible();
+    await expect(page.getByRole('heading', { name: addedTitles[1], exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: addedTitles[2], exact: true })).toBeVisible();
   });
 
   test('FAV-04: Add the same product twice', { tag: '@regression' }, async ({ page }) => {
     await createAndLoginCustomer(page);
 
     await page.goto('/');
-    await page.waitForResponse(res => res.url().includes('/products'));
-    await page.locator('.card').first().click();
+    await page.locator('a.card').first().click();
     await page.waitForURL(/.*product\/.*/);
 
     const productName = (await productDetailPage.productName.textContent())?.trim() || '';
 
     // First addition succeeds
     await productDetailPage.addToFavorites();
-    await expect(productDetailPage.toastMessage.filter({ hasText: favoritesData.messages.added })).toBeVisible();
+    await expect(page.getByText(favoritesData.messages.added)).toBeVisible();
 
     // Second addition is rejected with duplicate message
     await productDetailPage.addToFavorites();
-    await expect(productDetailPage.toastMessage.filter({ hasText: favoritesData.messages.alreadyAdded })).toBeVisible();
+    await expect(page.getByText(favoritesData.messages.alreadyAdded)).toBeVisible();
 
     // Verify it appears only once in the favorites list
     await favoritesPage.goto();
-    const titles = await favoritesPage.getFavoriteTitles();
-    const count = titles.filter(t => t === productName).length;
-    expect(count).toBe(1);
+    await expect(page.getByRole('heading', { name: productName, exact: true })).toHaveCount(1);
   });
 
   test('FAV-05: Favorites persist after logout and login', { tag: '@smoke' }, async ({ page }) => {
     const customer = await createAndLoginCustomer(page);
 
     await page.goto('/');
-    await page.waitForResponse(res => res.url().includes('/products'));
-    await page.locator('.card').first().click();
+    await page.locator('a.card').first().click();
     await page.waitForURL(/.*product\/.*/);
 
     const productName = (await productDetailPage.productName.textContent())?.trim() || '';
     await productDetailPage.addToFavorites();
-    await expect(productDetailPage.toastMessage.filter({ hasText: favoritesData.messages.added })).toBeVisible();
+    await expect(page.getByText(favoritesData.messages.added)).toBeVisible();
 
     // Log out
     const loginPage = new LoginPage(page);
@@ -132,18 +122,16 @@ test.describe('Step 06 - Customer Favorites', () => {
 
     // Verify favorite persists
     await favoritesPage.goto();
-    const titles = await favoritesPage.getFavoriteTitles();
-    expect(titles).toContain(productName);
+    await expect(page.getByRole('heading', { name: productName, exact: true })).toBeVisible();
   });
 
   test('FAV-06: Favorite when logged out', { tag: '@smoke' }, async ({ page }) => {
     await page.goto('/');
-    await page.waitForResponse(res => res.url().includes('/products'));
-    await page.locator('.card').first().click();
+    await page.locator('a.card').first().click();
     await page.waitForURL(/.*product\/.*/);
 
     await productDetailPage.addToFavorites();
-    await expect(productDetailPage.toastMessage.filter({ hasText: favoritesData.messages.unauthorized })).toBeVisible();
+    await expect(page.getByText(favoritesData.messages.unauthorized)).toBeVisible();
   });
 
   test('FAV-07: Unavailable product', { tag: '@regression' }, async ({ page }) => {
