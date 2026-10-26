@@ -55,13 +55,15 @@ test.describe('Step 07 - Customer Invoices', () => {
   });
 
   test('INV-04: Download PDF', { tag: '@smoke' }, async ({ page }) => {
+    test.slow(); // Triples timeout to accommodate backend PDF generation queue
     await loginAsCustomer(page, defaultUsers.customer1);
     await invoicesPage.goto();
 
     const invoiceNumber = await invoicesPage.getFirstInvoiceNumber();
     await invoicesPage.openFirstInvoiceDetails();
 
-    await expect(invoiceDetailPage.downloadButton).toBeEnabled();
+    // Accommodate Angular's 20s polling interval if the invoice was recently created
+    await expect(invoiceDetailPage.downloadButton).toBeEnabled({ timeout: 25000 });
 
     const downloadPromise = page.waitForEvent('download');
     await invoiceDetailPage.downloadButton.click();
