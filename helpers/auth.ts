@@ -41,6 +41,8 @@ export async function registerFreshCustomer(page: Page) {
     postalCode: testAddresses.netherlands.postcode,
     houseNumber: testAddresses.netherlands.houseNumber,
     state: testAddresses.netherlands.state,
+    city: testAddresses.netherlands.city,
+    street: testAddresses.netherlands.street,
     email: `customer_${timestamp}_${randomSuffix}@practicesoftwaretesting.com`
   };
 

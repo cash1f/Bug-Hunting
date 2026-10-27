@@ -2,8 +2,10 @@ import { Page, expect } from '@playwright/test';
 
 // Submits a contact inquiry from the Contact Form to generate customer message threads
 export async function sendContactMessage(page: Page, subjectIndex = 1, messageText = '') {
-  await page.goto('/contact');
-  await page.getByTestId('subject').selectOption({ index: subjectIndex });
+  await page.goto('/contact', { waitUntil: 'domcontentloaded' });
+  const subjectSelect = page.getByTestId('subject');
+  await subjectSelect.waitFor({ state: 'visible' });
+  await subjectSelect.selectOption({ index: subjectIndex });
   const text = messageText !== '' 
     ? messageText 
     : 'This is an automated customer support inquiry that is more than fifty characters long for test setup.';

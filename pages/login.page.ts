@@ -38,6 +38,7 @@ export class LoginPage {
   }
 
   async login(email: string, password: string) {
+    await this.emailInput.waitFor({ state: 'visible' });
     if (email !== '') {
       await this.emailInput.fill(email);
     } else {
