@@ -2,6 +2,8 @@
 
 # Practice Software Testing - Toolshop Automation
 
+[![Playwright Tests](https://github.com/cash1f/Bug-Hunting/actions/workflows/playwright.yml/badge.svg)](https://github.com/cash1f/Bug-Hunting/actions/workflows/playwright.yml)
+
 Automated test suite for [Practice Software Testing](https://practicesoftwaretesting.com/) built with Playwright and TypeScript. 
 
 The test scenarios are based on the 18-step Testing Guide found directly on the site, covering functional paths, boundary values, equivalence partitions, and error handling.
