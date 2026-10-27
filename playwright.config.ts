@@ -14,8 +14,8 @@ export default defineConfig({
   // Retries: retry once in CI to absorb intermittent network drops against the shared demo API
   retries: process.env.CI ? 1 : 0,
 
-  // Concurrency: limit to 2 parallel workers on CI to prevent throttling by the demo backend
-  workers: process.env.CI ? 2 : undefined,
+  // Concurrency: run single worker on CI to prevent Cloudflare rate-limiting and challenge interstitials
+  workers: process.env.CI ? 1 : undefined,
 
   // Reporters: include 'github' reporter in CI for inline annotations on PRs and job summaries
   reporter: process.env.CI
@@ -39,7 +39,11 @@ export default defineConfig({
     launchOptions: {
       // Allows live visual debugging when SLOWMO=<ms> is passed in terminal
       slowMo: process.env.SLOWMO ? parseInt(process.env.SLOWMO, 10) : 0,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-blink-features=AutomationControlled'
+      ]
     },
 
     // Capture artifacts only on test failures to keep CI artifact sizes light and focused
