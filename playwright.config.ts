@@ -15,6 +15,7 @@ export default defineConfig({
     channel: process.env.BROWSER_CHANNEL || (process.env.CI ? 'chrome' : undefined),
     headless: process.env.CI ? false : true,
     launchOptions: {
+      slowMo: process.env.SLOWMO ? parseInt(process.env.SLOWMO, 10) : 0,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     },
     screenshot: 'only-on-failure',

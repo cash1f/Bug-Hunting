@@ -55,9 +55,28 @@ Run the full test suite:
 npm test
 ```
 
+Run tests with visible browser (headed mode):
+```bash
+npm run test:headed
+```
+
+Slow down headed execution to watch actions live:
+```bash
+# Slow down every action by 500ms
+SLOWMO=500 npm run test:headed
+
+# Slow down a specific test file by 1000ms (1 second per action)
+SLOWMO=1000 npx playwright test tests/03-login.spec.ts --headed
+```
+
 Run tests with interactive UI mode:
 ```bash
 npm run test:ui
+```
+
+Debug tests step-by-step with the Playwright Inspector:
+```bash
+npx playwright test tests/03-login.spec.ts --debug
 ```
 
 Run only smoke tests:
@@ -78,6 +97,24 @@ npx playwright test tests/03-login.spec.ts
 View the HTML test report:
 ```bash
 npm run report
+```
+
+### 3. Listing and Counting Tests (Dry Run)
+Testers can preview and count tests matching specific tags without executing them using `--list`:
+
+List all `@smoke` tests and get total count:
+```bash
+npx playwright test --grep @smoke --list
+```
+
+List all `@regression` tests and get total count:
+```bash
+npx playwright test --grep @regression --list
+```
+
+List and count all tests across the repository:
+```bash
+npx playwright test --list
 ```
 
 ## Continuous Integration
