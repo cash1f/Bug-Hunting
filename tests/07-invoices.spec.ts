@@ -92,9 +92,9 @@ test.describe('Step 07 - Customer Invoices', () => {
     const loginPage = new LoginPage(page);
     await loginPage.logout();
 
-    // Log in as customer2
+    // Log in as customer3
     await loginPage.goto();
-    await loginPage.login(defaultUsers.customer2.email, defaultUsers.customer2.password);
+    await loginPage.login(defaultUsers.customer3.email, defaultUsers.customer3.password);
     await expect(page).toHaveURL(/.*account/);
 
     // Attempt to access customer1's invoice
