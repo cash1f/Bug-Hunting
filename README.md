@@ -1,5 +1,3 @@
-[![Playwright Tests](https://github.com/cash1f/Bug-Hunting/actions/workflows/playwright.yml/badge.svg)](https://github.com/cash1f/Bug-Hunting/actions/workflows/playwright.yml)
-
 # Practice Software Testing - Toolshop Automation
 
 [![Playwright Tests](https://github.com/cash1f/Bug-Hunting/actions/workflows/playwright.yml/badge.svg)](https://github.com/cash1f/Bug-Hunting/actions/workflows/playwright.yml)
