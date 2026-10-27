@@ -109,3 +109,15 @@ export const invoicesData = {
   },
   pdfHeader: '%PDF-'
 };
+
+export const messagesData = {
+  validReply: 'Thanks for the update. We received the details.',
+  longReply: 'A'.repeat(251),
+  emptyReply: '',
+  invalidMessageId: '01m99999999999999999999999',
+  validationMessages: {
+    required: 'The message field is required.',
+    tooLong: 'The message field must not be greater than 250 characters.'
+  }
+};
+
