@@ -1,3 +1,5 @@
+[![Playwright Tests](https://github.com/cash1f/Bug-Hunting/actions/workflows/playwright.yml/badge.svg)](https://github.com/cash1f/Bug-Hunting/actions/workflows/playwright.yml)
+
 # Practice Software Testing - Toolshop Automation
 
 Automated test suite for [Practice Software Testing](https://practicesoftwaretesting.com/) built with Playwright and TypeScript. 
