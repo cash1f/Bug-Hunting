@@ -69,11 +69,6 @@ SLOWMO=500 npm run test:headed
 SLOWMO=1000 npx playwright test tests/03-login.spec.ts --headed
 ```
 
-Run tests with interactive UI mode:
-```bash
-npm run test:ui
-```
-
 Debug tests step-by-step with the Playwright Inspector:
 ```bash
 npx playwright test tests/03-login.spec.ts --debug
